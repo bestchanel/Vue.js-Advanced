@@ -469,7 +469,259 @@ Logout - ออกจากระบบ - ອອກ​ຈາກ​ລະ​ບ�
 
 npm i firebase@8
 
+โปรเจ็กต์ vue-vite-vuetify-ts-pinia-finished ที่เสร็จแล้ว
+--
+https://github.com/iamsamitdev/vue-vite-vuetify-ts-pinia-finished
+
++++++++++++++++++++++++++++++++++++++
+Apexcharts
++++++++++++++++++++++++++++++++++++++
+npm install apexcharts
+npm install vue3-apexcharts
+
+main.ts
+--
+import VueApexCharts from "vue3-apexcharts“
+app.use(VueApexCharts)
+
++++++++++++++++++++++++++++++++++++++
+Vue datepicker
++++++++++++++++++++++++++++++++++++++
+npm install @vuepic/vue-datepicker@3.5.3
+
+main.ts
+---
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
+app.component('Datepicker', Datepicker)
+
+Setting.vue
+---
+<template>
+    <v-card-actions class="justify-center h-100">
+        <v-row justify="center" class="flex-column" style="flex-grow: 0">
+
+            <Datepicker 
+                ref="datepicker"
+                v-model="date" 
+                locale="th"
+                :format="format"
+                modelType="yyyy-MM-dd HH:mm:ss"  
+                placeholder="เลือกวัน" 
+                position="center"
+                autoApply 
+                @update:modelValue="handleDate"
+                style="margin-top: 300px">
+
+                <template #year="{ year }">
+                    {{ year + 543 }}
+                </template>
+
+            </Datepicker>
+
+            <h4 class="mt-4">ค่าที่จะนำไปใช้: {{ date }}</h4>
+
+        </v-row>
+    </v-card-actions>
+</template>
 
 
+<script setup lang="ts">
+
+import { ref } from 'vue'
+
+// Date Picker
+const date = ref()
+
+const format = (date: any) => {
+    const day = date.getDate()
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
+    const hour = date.getHours()
+    const min = date.getMinutes()
+    const sec = date.getSeconds()
+
+    // return `Selected date is ${day}/${month}/${year}`;
+    return `${day}/${month}/${year+543} ${hour}:${min}:${sec}`
+}
+
+const handleDate = (modelData: null) => {
+    date.value = modelData
+    if(date.value != null){
+        console.log(date.value)
+    }
+}
+
+</script>
+
++++++++++++++++++++++++++++++++++++++
+| การสร้างโปรเจ็กต์ใหม่ 
+| Vue + TS + Vite +  Pinia + Ant Design
++++++++++++++++++++++++++++++++++++++
+Step 1: Install Vite in Global
+---
+$ npm install -g vite
+
+Step 2: Create new Vite Project with Vue
+---
+$ npm create vite@latest
+or
+$ yarn create vite
+
+กำหนดชื่อโปรเจ็กต์เป็น "vue-vite-antdesign-ts-pinia"
+
+Step 3: เปิดโปรเจ็กต์เข้า VS Code
+---
+code vue-vite-antdesign-ts-pinia
+
+Step 4: Install node module in Vite Project
+---
+$ npm install
+
+Step 5: Run Project Vite with Vue
+---
+$ npm run dev
+
+Step 6: Install @types/node
+---
+$ npm install -D @types/node
+
+Step 7: Install pinia
+---
+$ npm install pinia
+
+Step 8: Install vue-router
+---
+$ npm install vue-router@4
+
+Step 9: Library ที่ใช้ทำงานกับ AntDesign
+---
+npm i ant-design-vue@next
+
+Step 10: Config vite.config.ts
+---
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { fileURLToPath, URL } from 'url'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
+  },
+  plugins: [
+    vue(),
+  ],
+})
+
+
+Step 11: Config tsconfig.json
+---
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+
+
+Step 11: Config main.ts
+---
+import { createApp } from 'vue'
+
+// Import Ant Design
+import Antd from "ant-design-vue";
+import "ant-design-vue/dist/antd.css"
+
+// Import Root Component
+import App from './App.vue'
+
+// Import Pinia
+import { createPinia } from 'pinia'
+
+// Import Router
+import router from './router/index'
+
+
+const app = createApp(App)
+app.use(Antd)
+app.use(createPinia())
+app.use(router)
+app.mount('#app')
+
+--------------------------------------------------------------------
+Vue 3 with styled component
+--------------------------------------------------------------------
+npm install vue3-styled-components
+npm install typescript-styled-plugin
+
+tsconfig.json
+---
+"paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+
+App.vue
+---
+import { ThemeProvider } from 'vue3-styled-components'
+
+<ThemeProvider :theme="{primary: 'white'}">
+    <router-view />
+</ThemeProvider>
+
+<script setup lang="ts">
+import { ThemeProvider } from 'vue3-styled-components'
+</script>
+
+--------------------------------------------------------------------
+Vue 3 with CKEditor 5
+--------------------------------------------------------------------
+
+npm install --save @ckeditor/ckeditor5-vue @ckeditor/ckeditor5-build-classic
+
+config in main.ts
+---
+import CKEditor from '@ckeditor/ckeditor5-vue'
+
+app.use(CKEditor)
+
+
++++++++++++++++++++++++++++++++++++++
+Deployed to netlify
++++++++++++++++++++++++++++++++++++++
+netlify.toml
+---
+# example netlify.toml
+[build]
+  command = "vite build"
+  functions = "netlify/functions"
+  publish = "dist"
+
+## Uncomment to use this redirect for Single Page Applications
+## Not needed for static site generators.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+
++++++++++++++++++++++++++++++++++++++
+Deployed to vercel
++++++++++++++++++++++++++++++++++++++
+vercel.json
+---
+
+{
+    "rewrites": [
+      { "source": "/(.*)", "destination": "/index.html" }
+    ],
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist"
+  }
+  
 
 

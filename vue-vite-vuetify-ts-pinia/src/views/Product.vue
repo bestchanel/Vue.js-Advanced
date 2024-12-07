@@ -124,6 +124,9 @@ const product = ref({
     price: ''
 })
 
+// Const for count total product add
+const count: any = ref(0)
+
 // Method Open Add Dialog
 const OpenAddDialog = () => {
     dialog.value = true
@@ -168,7 +171,14 @@ onMounted(() => {
             products.value.push(doc.data()) 
             // console.log(products.value[0])
         })
-    })  
+    })
+
+    // Count total new products
+    db.collection("product_counts")
+        .onSnapshot((querySnapshot) => {
+        count.value = querySnapshot.docs[0].data()
+        // console.log(count.value.total)
+    })
 })
 
 // Add New Product to firebase
@@ -190,6 +200,13 @@ const addProduct = () => {
     // Reset Form
     product.value.name = ""
     product.value.price = ""
+
+    // Update total count
+    db.collection("product_counts")
+    .doc('p_count')
+    .update({
+        total: count.value.total + 1
+    })
 }
 
 // Update Product to firease
