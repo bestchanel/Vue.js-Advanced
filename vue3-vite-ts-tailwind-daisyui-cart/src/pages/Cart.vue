@@ -1,16 +1,21 @@
 <template>
     <div class="p-4 max-w-4xl mx-auto">
         <div class="space-y-4">
-        <!-- <CartCardSkeleton v-for="n in 15" :key="n" /> -->
+        <CartCardSkeleton v-if="!productStore.loaded" v-for="n in 15" :key="n" />
         </div>
         <div class="space-y-4">
             <CartCard
-            v-for="(cartProduct, index) in products"
-            :key="index"
-            :cartProduct="cartProduct"
-            />
+                v-for="(cartProduct, index) in formattedCart"
+                :key="index"
+                :cartProduct="cartProduct">
+                
+                <template v-slot:cartNumber>
+                    {{ index+1 }}
+                </template>
+
+            </CartCard>
             <div class="text-right text-2xl md:text-2xl font-bold py-4">
-                ยอดรวม: 2,520.00
+                ยอดรวม: {{ toCurrency(cartStore.total) }}
             </div>
         </div>
     </div>
@@ -19,9 +24,21 @@
 <script setup lang="ts">
 
   import CartCard from '../components/CartCard.vue';
-//   import CartCardSkeleton from '../components/CartCardSkeleton.vue'
+  import CartCardSkeleton from '../components/CartCardSkeleton.vue'
+
+  import { toCurrency } from '@/shared/utils'
+  import { computed } from 'vue'
+
+  import { useCartStore } from '../store/cart'
+  import { useProductStore } from '../store/products'
+    
+
+  const cartStore = useCartStore()
+  const productStore = useProductStore()
+
+  const formattedCart = computed(() => cartStore.formattedCart)
 
 // Mockup
-import  products from '../mockupdata/product.json'
+// import  products from '../mockupdata/product.json'
 
 </script>
