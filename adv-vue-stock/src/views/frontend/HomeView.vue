@@ -3,6 +3,27 @@
         <div class="grid items-center gap-10 lg:grid-cols-2">
             <div class="space-y-8 lg:space-y-12">
                 <div class="space-y-6">
+
+                    <!-- <h1 class="text-3xl leading-3">Count: {{ store.count }}</h1>
+                    <h1 class="text-3xl leading-3">Double Count: {{ store.doubleCount }}</h1>
+
+                    <button class="bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 py-2 px-5 rounded-lg text-white font-semibold mr-4" @click="store.increment(1)">Increment</button>
+
+                    <button class="bg-red-600 hover:bg-red-700 transition-colors duration-300 py-2 px-5 rounded-lg text-white font-semibold mr-4" @click="store.decrement(1)">Decrement</button>
+
+                    <button class="bg-purple-600 hover:bg-purple-700 transition-colors duration-300 py-2 px-5 rounded-lg text-white font-semibold mr-4" @click="store.waitAndAdd()">Wait+Increment</button> -->
+
+
+                    <h1 class="text-3xl leading-3">Count: {{ count }}</h1>
+                    <h1 class="text-3xl leading-3">Double Count: {{ doubleCount }}</h1>
+
+                    <button class="bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 py-2 px-5 rounded-lg text-white font-semibold mr-4" @click="increment(1)">Increment</button>
+
+                    <button class="bg-red-600 hover:bg-red-700 transition-colors duration-300 py-2 px-5 rounded-lg text-white font-semibold mr-4" @click="decrement(1)">Decrement</button>
+
+                    <button class="bg-purple-600 hover:bg-purple-700 transition-colors duration-300 py-2 px-5 rounded-lg text-white font-semibold mr-4" @click="waitAndAdd()">Wait+Increment</button>
+
+
                     <h1 class="text-3xl md:text-6xl font-semibold">Landing page <br>for your online service</h1>
                     <p class="max-w-sm text-xl">Sed ea enim et expedita quo. Sint consequuntur nobis expedita mollitia voluptatem aut est a quia.</p>
                 </div>
@@ -11,9 +32,21 @@
                     <button type="submit" class="px-6 py-4 font-semibold text-white transition-colors duration-300 rounded-lg bg-emerald-600 hover:bg-emerald-700 sm:rounded-none sm:rounded-tr-lg sm:rounded-br-lg">Get Started</button>
                 </div>
             </div>
-            <div>
-                <img src="@/assets/img/hero-illustration.png" alt="Illustration">
+
+            <!-- <div class="block">
+                <img :src="state" alt="Illustration" class="md:h-96 mx-auto">
+                <p class="grid grid-cols-2 text-center mt-4">
+                    <button @click="prev()">&lt; Back</button>
+                    <button @click="next()">Next ></button>
+                </p>
+            </div> -->
+
+            <div class="carousel block">
+                <transition>
+                    <img :key="state" :src="state" alt="" class="slide mx-auto md:h-96">
+                </transition>
             </div>
+
         </div>
     </section><!-- End Hero -->
       
@@ -31,8 +64,77 @@
 
 <script setup lang="ts">
 
+    // import { useCycleList } from '@vueuse/core'
+
+    // const { state, next, prev } = useCycleList([
+    //     './src/assets/img/hero-illustration.png',
+    //     './src/assets/img/slide2.svg',
+    //     './src/assets/img/slide3.svg',
+    // ])
+
+    import { computed } from 'vue'
+    import { useIntervalFn } from '@vueuse/core'
+    import { useAppCycleList } from '../../hook/useAppCycleList'
+
+    import { storeToRefs, mapActions } from 'pinia'
+    
+    // Import counter.ts
+    import { useCounterStore } from '@/store/counter'
+
+    // Object store
+    const store = useCounterStore()
+
+    // หรือจะเขียนแบบ destructuring
+    const { count, doubleCount } = storeToRefs(store)
+    const { increment, decrement, waitAndAdd } = mapActions(useCounterStore, ['increment', 'decrement', 'waitAndAdd'])
+
+    const images = [
+        './src/assets/img/hero-illustration.png',
+        './src/assets/img/slide2.svg',
+        './src/assets/img/slide3.svg',
+    ]
+
+    const { state, next, isForward } = useAppCycleList(images)
+
+    useIntervalFn(() => next(), 3000)
+
+    const direction = computed(() => {
+        if (isForward.value) {
+            return {
+                from: 'translateX(100%)',
+                to: 'translateX(-50%)',
+            };
+        } else {
+            return {
+                from: 'translateX(-100%)',
+                to: 'translateX(100%)',
+            };
+        }
+    })
+
+
 </script>
 
 <style scoped>
+.carousel {
+  position: relative;
+  top: -100px;
+  /* left: 0%; */
+}
+img.slide {
+  position: absolute;
+  top: -80px;
+  /* left: 15%; */
+}
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.5s ease;
+}
 
+.v-enter-from {
+  transform: v-bind('direction.from');
+}
+.v-leave-to {
+  transform: v-bind('direction.to');
+}
 </style>

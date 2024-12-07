@@ -25,8 +25,37 @@
                     <li>
                         <router-link to="/" class="transition-colors duration-200 text-gray-100  dark:text-white  md:text-black hover:text-emerald-700">Home</router-link>
                     </li>
-                    <li>
+                    <li @click="toggleDropdownMenu">
                         <router-link to="/features" class="transition-colors duration-200 text-gray-100  dark:text-white md:text-black hover:text-emerald-700">Features</router-link>
+
+                        <!-- Submenu -->
+                        <ul 
+                            v-show="show"
+                            ref="target"
+                            class="
+                            md:absolute 
+                            md:bg-white 
+                            w-48 
+                            mt-2 
+                            mx-auto
+                            bg-emerald-800
+                            rounded-md 
+                            md:text-start 
+                            shadow-lg 
+                            ring-1 
+                            ring-black 
+                            ring-opacity-5">
+                            <li>
+                                <a href="#Incredible" class="md:text-black block px-4 py-2 md:hover:bg-gray-100">Incredible</a>
+                            </li>
+                            <li>
+                                <a href="#Fantastic" class="md:text-black block px-4 py-2 md:hover:bg-gray-100">Fantastic</a>
+                            </li>
+                            <li>
+                                <a href="#Intelligent" class="md:text-black block px-4 py-2 md:hover:bg-gray-100">Intelligent</a>
+                            </li>
+                        </ul>
+
                     </li>
                     <li>
                         <router-link to="/services" class="transition-colors duration-200 text-gray-100  dark:text-white md:text-black hover:text-emerald-700">Services</router-link>
@@ -40,7 +69,7 @@
 
                     <li>
                         <router-link to="/getstarted">
-                            <button class="bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 py-2.5 px-5 rounded-lg text-white font-semibold">Get Started</button>
+                            <button class="bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 py-2.5 px-5 rounded-lg text-white font-semibold">Get Started ({{ count }})</button>
                         </router-link>
                     </li>
 
@@ -59,7 +88,19 @@
 <script setup lang="ts">
 
     import { ref } from 'vue'
-    import { useDark, useToggle } from '@vueuse/core'
+    import { useDark, useToggle, onClickOutside  } from '@vueuse/core'
+
+    // Import counter.ts
+    import { useCounterStore } from '@/store/counter'
+
+    // Import Pinia
+    import { storeToRefs } from 'pinia'
+
+    // Object store
+    const store = useCounterStore()
+
+    // หรือจะเขียนแบบ destructuring
+    const { count } = storeToRefs(store)
 
     // Toggle Menu
     const showMenu = ref(false)
@@ -67,9 +108,24 @@
     // Method Toggle Menu
     const toggleMenu = () => showMenu.value = !showMenu.value
 
+    // Toggle Dropdown Menu
+    const show = ref(false)
+
+    // Method Toggle Dropdown Menu
+    const toggleDropdownMenu = () => show.value = !show.value
+
+    // Hide Dropdow Menu when click outside
+    const target = ref(null)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onClickOutside(target, (event) => {
+        // console.log(event)
+        show.value = false
+    })
+
     // Dark Mode
     const isDark = useDark()
     const toggleDark = useToggle(isDark)
+    
 
     // Choose Logo
     const img_logo = isDark ? "./src/assets/img/logo-white.svg":"./src/assets/img/logo.svg"
