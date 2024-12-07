@@ -71,10 +71,7 @@
         </v-app-bar>
 
         <v-main>
-            <div class="pa-md-8">
-                <h1>{{ t(`${route.meta.header}`) }}</h1>
-                <router-view />
-            </div>
+            <router-view />
         </v-main>
 
     </v-app>
