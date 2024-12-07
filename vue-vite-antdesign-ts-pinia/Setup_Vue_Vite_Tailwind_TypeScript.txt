@@ -632,7 +632,7 @@ Step 11: Config main.ts
 import { createApp } from 'vue'
 
 // Import Ant Design
-import Antd from "ant-design-vue";
+import Antd from "ant-design-vue"
 import "ant-design-vue/dist/antd.css"
 
 // Import Root Component
@@ -650,6 +650,11 @@ app.use(Antd)
 app.use(createPinia())
 app.use(router)
 app.mount('#app')
+
+หากต้องการใช้ Icon ใน Ant Design
+ต้องติดตั้ง Library
+---
+npm install @ant-design/icons-vue
 
 --------------------------------------------------------------------
 Vue 3 with styled component
@@ -688,6 +693,11 @@ config in main.ts
 import CKEditor from '@ckeditor/ckeditor5-vue'
 
 app.use(CKEditor)
+
+สร้างไฟล์ src/types/index.d.ts
+---
+declare module '@ckeditor/ckeditor5-vue'
+declare module '@ckeditor/ckeditor5-build-classic'
 
 
 +++++++++++++++++++++++++++++++++++++
