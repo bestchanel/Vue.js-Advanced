@@ -9,9 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@intlify/vite-plugin-vue-i18n": "^6.0.3",
     "@mdi/font": "^7.0.96",
+    "firebase": "^8.10.1",
     "pinia": "^2.0.26",
     "vue": "^3.2.41",
+    "vue-i18n": "^9.2.2",
     "vue-router": "^4.1.6",
     "vuetify": "^3.0.2"
   },

@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import Home from '@/views/Home.vue'
+import Dashboard from '@/views/Dashboard.vue'
+import Product from '@/views/Product.vue'
+import Order from '@/views/Order.vue'
+import Report from '@/views/Report.vue'
+import Setting from '@/views/Setting.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -10,11 +14,52 @@ const routes: Array<RouteRecordRaw> = [
          component: DefaultLayout,
          children: [
             {
-                path: '',
-                name: 'Home',
-                component: Home,
+                path: '/',
+                redirect: '/dashboard'
+            },
+            {
+                path: '/dashboard',
+                name: 'Dashboard',
+                component: Dashboard,
                 meta: {
-                    title: 'Home'
+                    title: 'Dashboard',
+                    header: 'menu_dashboard'
+                }
+            },
+            {
+                path: '/product',
+                name: 'Product',
+                component: Product,
+                meta: {
+                    title: 'Product',
+                    header: 'menu_product'
+                }
+            },
+            {
+                path: '/order',
+                name: 'Order',
+                component: Order,
+                meta: {
+                    title: 'Order',
+                    header: 'menu_order'
+                }
+            },
+            {
+                path: '/report',
+                name: 'Report',
+                component: Report,
+                meta: {
+                    title: 'Report',
+                    header: 'menu_report'
+                }
+            },
+            {
+                path: '/setting',
+                name: 'Setting',
+                component: Setting,
+                meta: {
+                    title: 'Setting',
+                    header: 'menu_setting'
                 }
             }
         ]

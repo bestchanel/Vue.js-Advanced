@@ -15,8 +15,12 @@ import { createPinia } from 'pinia'
 // Import Router
 import router from './router/index'
 
+// i18n Multi Language
+import i18n from './plugins/i18n'
+
 const app = createApp(App)
 app.use(vuetify)
+app.use(i18n)
 app.use(createPinia())
 app.use(router)
 app.mount('#app')
